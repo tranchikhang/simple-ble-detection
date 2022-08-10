@@ -30,7 +30,7 @@ class ScanService {
         bleDeviceText = textview
         bluetoothManager = context.getSystemService(BluetoothManager::class.java)
         bluetoothAdapter = bluetoothManager.adapter
-        if (bluetoothAdapter==null) {
+        if (bluetoothAdapter == null) {
             // Device doesn't support Bluetooth
             throw Exception("Device doesn't support Bluetooth")
         }
@@ -52,12 +52,9 @@ class ScanService {
                 isScanning = true
 
                 bluetoothLeScanner.startScan(leScanCallback)
-            } else {
-                isScanning = false
-            bluetoothLeScanner.stopScan(leScanCallback)
-        }
+            }
 
-    } catch (e: SecurityException) {
+        } catch (e: SecurityException) {
             Log.e(TAG, "@startScan SecurityException: " + e.message)
         }
     }
@@ -66,8 +63,13 @@ class ScanService {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             super.onScanResult(callbackType, result)
             try {
-                Log.d(TAG, "Device Name: " + result?.getDevice()?.getName() + " rssi: " + result?.getRssi() + "\n")
-                bleDeviceText.text = bleDeviceText.text.toString() + "Device Name: " + result?.getDevice()?.getName() + " rssi: " + result?.getRssi() + "\n"
+                Log.d(TAG,
+                    "Device Name: " + result?.getDevice()
+                        ?.getName() + " rssi: " + result?.getRssi() + "\n"
+                )
+                bleDeviceText.text =
+                    bleDeviceText.text.toString() + "Device Name: " + result?.getDevice()
+                        ?.getName() + " rssi: " + result?.getRssi() + "\n"
             } catch (e: SecurityException) {
                 Log.e(TAG, "@startScan SecurityException: " + e.message)
             }
