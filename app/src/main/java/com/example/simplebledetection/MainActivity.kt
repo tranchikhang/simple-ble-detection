@@ -45,12 +45,13 @@ class MainActivity : AppCompatActivity() {
     private fun startScan() {
         // start scanning BLE device
         if (scanService != null) {
+            scanService.startBLEScan()
             if (scanService.isScanning()) {
                 binding.scanBtn.text = "Scanning"
             } else {
                 binding.scanBtn.text = "Scan"
+                scanService.stopBLEScan()
             }
-            scanService.startBLEScan()
         }
     }
 

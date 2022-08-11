@@ -52,10 +52,18 @@ class ScanService {
                 isScanning = true
 
                 bluetoothLeScanner.startScan(leScanCallback)
+            } else {
+                isScanning = false
+                bluetoothLeScanner.stopScan(leScanCallback)
             }
-
         } catch (e: SecurityException) {
             Log.e(TAG, "@startScan SecurityException: " + e.message)
+        }
+    }
+
+    public fun stopBLEScan() {
+        if (isScanning) {
+            bluetoothLeScanner.stopScan(leScanCallback)
         }
     }
 
