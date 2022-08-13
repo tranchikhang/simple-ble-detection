@@ -44,14 +44,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun startScan() {
         // start scanning BLE device
-        if (scanService != null) {
-            scanService.startBLEScan()
-            if (scanService.isScanning()) {
-                binding.scanBtn.text = "Scanning"
-            } else {
-                binding.scanBtn.text = "Scan"
-                scanService.stopBLEScan()
-            }
+        scanService.startBLEScan()
+        if (scanService.isScanning()) {
+            binding.scanBtn.text = "Scanning"
+        } else {
+            binding.scanBtn.text = "Scan"
+            scanService.stopBLEScan()
         }
     }
 
@@ -96,9 +94,9 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.BLUETOOTH_ADMIN
             ) != PackageManager.PERMISSION_GRANTED)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                ActivityCompat.requestPermissions(this, ANDROID_12_BLE_PERMISSIONS, 1);
+                ActivityCompat.requestPermissions(this, ANDROID_12_BLE_PERMISSIONS, 1)
             else
-                ActivityCompat.requestPermissions(this, BLE_PERMISSIONS, 1);
+                ActivityCompat.requestPermissions(this, BLE_PERMISSIONS, 1)
 
             Log.d(TAG, "@BluetoothGranted Bluetooth is off")
             return

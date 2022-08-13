@@ -42,7 +42,7 @@ class ScanService {
         bluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
     }
 
-    public fun startBLEScan() {
+    fun startBLEScan() {
         try {
             if (!isScanning) {
                 handler.postDelayed({
@@ -61,7 +61,7 @@ class ScanService {
         }
     }
 
-    public fun stopBLEScan() {
+    fun stopBLEScan() {
         if (isScanning) {
             bluetoothLeScanner.stopScan(leScanCallback)
         }
@@ -69,15 +69,17 @@ class ScanService {
 
     private val leScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
+            val scanRecord = result?.scanRecord
             super.onScanResult(callbackType, result)
             try {
                 Log.d(TAG,
                     "Device Name: " + result?.getDevice()
                         ?.getName() + " rssi: " + result?.getRssi() + "\n"
                 )
+                val device = BLEDevice(result?.getDevice()?.getName(), result?.getRssi(), scanRecord?.bytes)
                 bleDeviceText.text =
-                    bleDeviceText.text.toString() + "Device Name: " + result?.getDevice()
-                        ?.getName() + " rssi: " + result?.getRssi() + "\n"
+                    bleDeviceText.text.toString() +
+                            "Device Name: " + device.getDeviceName() + " rssi: " + device.getDeviceRssi() + "\n"
             } catch (e: SecurityException) {
                 Log.e(TAG, "@startScan SecurityException: " + e.message)
             }
@@ -86,7 +88,7 @@ class ScanService {
 
     }
 
-    public fun isScanning(): Boolean {
+    fun isScanning(): Boolean {
         return isScanning
     }
 }
