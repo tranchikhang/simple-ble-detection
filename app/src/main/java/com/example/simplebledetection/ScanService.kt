@@ -80,13 +80,12 @@ class ScanService {
                     )
                     if (device.isIBeacon()) {
                         Log.d(TAG, "Device is iBeacon")
-                        Log.d(TAG, device.parseUUID())
                     }
 
                     if (device.isIBeacon()) {
                         bleDeviceText.text =
                             bleDeviceText.text.toString() +
-                                    "Device Name: " + device.getDeviceName() + " rssi: " + device.getDeviceRssi() + "\n"
+                                    "Device UUID: " + device.parseUUID() + " rssi: " + device.getDeviceRssi() + "\n" + "Major: " + device.getMajor() + "\n" + "Minor: " + device.getMinor() + "\n"
                     }
                 }
             } catch (e: SecurityException) {

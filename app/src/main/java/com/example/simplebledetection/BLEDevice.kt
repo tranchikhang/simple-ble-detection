@@ -12,6 +12,11 @@ open class BLEDevice {
     protected var rssi: Int = 0
     protected var rawByteData: ByteArray = ByteArray(30)
 
+    protected val majorPosStart = 25
+    protected val majorPosEnd = 26
+    protected val minorPosStart = 27
+    protected val minorPosEnd = 28
+
     private val TAG = "BLEDevice"
 
     constructor(deviceName: String?, deviceRssi: Int?, byteData: ByteArray?) {
@@ -61,20 +66,17 @@ open class BLEDevice {
     }
 
 
-    fun bytesToHex(bytes: ByteArray) : String {
-        return rawByteData.joinToString("") {
-             String.format("0x%02X", it)
-        }
-    }
-
-    fun bytesToHex2(bytes: ByteArray) : String {
-        return rawByteData.joinToString("") {
-            (0xFF and it.toInt()).toString(16).padStart(2, '0')
-        }
-    }
+//    fun bytesToHex(bytes: ByteArray) : String {
+//        return rawByteData.joinToString("") {
+//             String.format("%02x", it)
+//            // same as
+//            // (0xFF and it.toInt()).toString(16).padStart(2, '0')
+//        }
+//    }
 
 
-    private fun bytesToHex3(bytes: ByteArray): String {
+
+    private fun bytesToHex(bytes: ByteArray): String {
         val hexArray = "0123456789ABCDEF".toCharArray()
         val hexChars = CharArray(bytes.size * 2)
         for (j in bytes.indices) {
@@ -85,7 +87,6 @@ open class BLEDevice {
         return String(hexChars)
     }
 
-
     fun parseUUID(): String {
         var startByte = 2
         while (startByte <= 5) {
@@ -95,32 +96,28 @@ open class BLEDevice {
                 val hexString = bytesToHex(uuidBytes)
                 // 0x020x010x1A0x1A0xFF0x4C0x000x020x150xE80xC60x560x020x6D0x9C0x440xEF0x970x340xB20xD30xEF0x1C0xD90x610x000x010x070x210xC50x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x000x00
                 Log.d(TAG, hexString)
-                val hexString2 = bytesToHex2(uuidBytes)
-                // 02011a1aff4c000215e8c656026d9c44ef9734b2d3ef1cd96100010721c50000000000000000000000000000000000000000000000000000000000000000
-                Log.d(TAG, hexString2)
-                val hexString3 = bytesToHex3(uuidBytes)
-                // E8C656026D9C44EF9734B2D3EF1CD961
-                Log.d(TAG, hexString3)
                 val sb = StringBuilder()
-                if (hexString.isNullOrEmpty()) {
-                    hexString?.let {
-                        sb.append(it.substring(0, 8))
-                        sb.append("-")
-                        sb.append(it.substring(8, 12))
-                        sb.append("-")
-                        sb.append(it.substring(12, 16))
-                        sb.append("-")
-                        sb.append(it.substring(16, 20))
-                        sb.append("-")
-                        sb.append(it.substring(20, 32))
-                    }
-
+                if (!hexString.isNullOrEmpty()) {
+                    val uuid = hexString.substring(0, 8) + "-" +
+                            hexString.substring(8, 12) + "-" +
+                            hexString.substring(12, 16) + "-" +
+                            hexString.substring(16, 20) + "-" +
+                            hexString.substring(20, 32)
+                    return uuid
                 }
-                return sb.toString()
+                return ""
             }
             startByte++
         }
         return ""
+    }
+
+    fun getMajor(): Int {
+        return (rawByteData[majorPosStart].toInt() and 0xff) * 0x100 + (rawByteData[majorPosEnd].toInt() and 0xff)
+    }
+
+    fun getMinor(): Int {
+        return (rawByteData[minorPosStart].toInt() and 0xff) * 0x100 + (rawByteData[minorPosEnd].toInt() and 0xff)
     }
 
 }
