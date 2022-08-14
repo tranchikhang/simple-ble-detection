@@ -72,21 +72,14 @@ class ScanService {
             val scanRecord = result?.scanRecord
             super.onScanResult(callbackType, result)
             try {
-                if (scanRecord != null) {
-                    val device = BLEDevice(
-                        result?.getDevice()?.getName(),
-                        result?.getRssi(),
+                if (scanRecord != null && BLEDevice.isIBeacon(scanRecord?.bytes)) {
+                    Log.d(TAG, "Device is iBeacon")
+                    val device = IBeacon(
                         scanRecord?.bytes
                     )
-                    if (device.isIBeacon()) {
-                        Log.d(TAG, "Device is iBeacon")
-                    }
-
-                    if (device.isIBeacon()) {
-                        bleDeviceText.text =
-                            bleDeviceText.text.toString() +
-                                    "Device UUID: " + device.parseUUID() + " rssi: " + device.getDeviceRssi() + "\n" + "Major: " + device.getMajor() + "\n" + "Minor: " + device.getMinor() + "\n"
-                    }
+                    bleDeviceText.text =
+                        bleDeviceText.text.toString() +
+                                "Device UUID: " + device.getUUID() + "\n" + "Major: " + device.getMajor() + "\n" + "Minor: " + device.getMinor() + "\n"
                 }
             } catch (e: SecurityException) {
                 Log.e(TAG, "@startScan SecurityException: " + e.message)
