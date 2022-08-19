@@ -1,10 +1,14 @@
 package com.example.simplebledetection
 
-import android.util.Log
 
 object BLEDevice {
-     fun isIBeacon(packetData: ByteArray): Boolean {
 
+    /**
+     * Check if packet is from an iBeacon
+     * @param packetData packet data which app captured
+     * @return true if packet is from iBeacon, otherwise false
+     */
+    fun isIBeacon(packetData: ByteArray): Boolean {
         var startByte = 2
         while (startByte <= 5) {
             if (packetData[startByte + 2].toInt() and 0xff == 0x02 && packetData[startByte + 3].toInt() and 0xff == 0x15) {
@@ -16,6 +20,11 @@ object BLEDevice {
         return false
     }
 
+    /**
+     * convert bytes data to hex string
+     * @param bytes input bytes
+     * @return hex string
+     */
     fun bytesToHex(bytes: ByteArray): String {
         val hexArray = "0123456789ABCDEF".toCharArray()
         val hexChars = CharArray(bytes.size * 2)

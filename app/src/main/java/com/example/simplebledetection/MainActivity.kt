@@ -58,7 +58,8 @@ class MainActivity : AppCompatActivity() {
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED) {
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             Log.d(TAG, "@isLocationGranted location is off")
             return
         }
@@ -92,7 +93,8 @@ class MainActivity : AppCompatActivity() {
             (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.BLUETOOTH_ADMIN
-            ) != PackageManager.PERMISSION_GRANTED)) {
+            ) != PackageManager.PERMISSION_GRANTED)
+        ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
                 ActivityCompat.requestPermissions(this, ANDROID_12_BLE_PERMISSIONS, 1)
             else
@@ -102,6 +104,5 @@ class MainActivity : AppCompatActivity() {
             return
         }
     }
-
 
 }

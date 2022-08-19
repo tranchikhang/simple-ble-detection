@@ -35,6 +35,9 @@ class IBeacon {
         rawByteData = packetData
     }
 
+    /**
+     * Parse iBeacon UUID from packet
+     */
     private fun parseUUID() {
         var startByte = 2
         while (startByte <= 5) {
@@ -48,12 +51,16 @@ class IBeacon {
                             hexString.substring(12, 16) + "-" +
                             hexString.substring(16, 20) + "-" +
                             hexString.substring(20, 32)
+                    return
                 }
             }
             startByte++
         }
     }
 
+    /**
+     * UUID getter method
+     */
     fun getUUID(): String {
         if (uuid.isNullOrEmpty()) {
             parseUUID()
