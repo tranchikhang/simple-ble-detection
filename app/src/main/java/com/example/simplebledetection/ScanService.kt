@@ -34,12 +34,11 @@ class ScanService {
             // Device doesn't support Bluetooth
             throw Exception("Device doesn't support Bluetooth")
         }
-
-        if (!bluetoothAdapter.isEnabled) {
-            throw Exception("Bluetooth is disabled")
-
-        }
         bluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
+    }
+
+    fun isBluetoothEnabled() : Boolean {
+        return bluetoothAdapter.isEnabled
     }
 
     fun startBLEScan() {
