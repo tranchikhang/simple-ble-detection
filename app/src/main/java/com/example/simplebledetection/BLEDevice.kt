@@ -1,38 +1,38 @@
 package com.example.simplebledetection
 
+import android.bluetooth.le.ScanResult
 
-object BLEDevice {
+open class BLEDevice(scanResult: ScanResult) {
 
     /**
-     * Check if packet is from an iBeacon
-     * @param packetData packet data which app captured
-     * @return true if packet is from iBeacon, otherwise false
+     * The measured signal strength of the Bluetooth packet
      */
-    fun isIBeacon(packetData: ByteArray): Boolean {
-        var startByte = 2
-        while (startByte <= 5) {
-            if (packetData[startByte + 2].toInt() and 0xff == 0x02 && packetData[startByte + 3].toInt() and 0xff == 0x15) {
-                // debug result: startByte = 5
-                return true
-            }
-            startByte++
+    private var rssi: Int = 0
+
+    /**
+     * Device mac address
+     */
+    private var address: String = ""
+
+    /**
+     * Device friendly name
+     */
+    private var name: String = ""
+
+
+    init {
+        if (scanResult.device.name != null) {
+            name = scanResult.device.name
         }
-        return false
+        address = scanResult.device.address
+        rssi = scanResult.rssi
     }
 
-    /**
-     * convert bytes data to hex string
-     * @param bytes input bytes
-     * @return hex string
-     */
-    fun bytesToHex(bytes: ByteArray): String {
-        val hexArray = "0123456789ABCDEF".toCharArray()
-        val hexChars = CharArray(bytes.size * 2)
-        for (j in bytes.indices) {
-            val v: Int = bytes[j].toInt() and 0xFF
-            hexChars[j * 2] = hexArray.get(v ushr 4)
-            hexChars[j * 2 + 1] = hexArray.get(v and 0x0F)
-        }
-        return String(hexChars)
+    fun getAddress(): String {
+        return address
+    }
+
+    fun getRssi(): Int {
+        return rssi
     }
 }

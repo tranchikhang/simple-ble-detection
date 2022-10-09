@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/deviceType"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="ibeacon"
+        android:textSize="20dp"
+        android:textColor="@color/Black" />
+    <TextView
+        android:id="@+id/labelAddress"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/deviceType"
+        android:layout_marginTop="5dp"
+        android:text="Address"
+        android:textStyle="bold"
+        android:textColor="@android:color/black" />
+    <TextView
+        android:id="@+id/txtAddress"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelAddress"
+        android:layout_marginTop="5dp"
+        android:textColor="@android:color/black" />
+    <TextView
+        android:id="@+id/labelUuid"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtAddress"
+        android:layout_marginTop="5dp"
+        android:text="UUID"
+        android:textStyle="bold"
+        android:textColor="@android:color/black" />
+    <TextView
+        android:id="@+id/txtUuid"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelUuid"
+        android:layout_marginTop="5dp"
+        android:textColor="@android:color/black" />
+    <TextView
+        android:id="@+id/labelMajor"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtUuid"
+        android:layout_marginTop="5dp"
+        android:text="Major"
+        android:textStyle="bold"
+        android:textColor="@android:color/black" />
+    <TextView
+        android:id="@+id/txtMajor"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelMajor"
+        android:layout_marginTop="5dp"
+        android:textColor="@android:color/black" />
+    <TextView
+        android:id="@+id/labelMinor"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtUuid"
+        android:layout_toRightOf="@+id/labelMajor"
+        android:layout_marginTop="5dp"
+        android:text="Minor"
+        android:textStyle="bold"
+        android:textColor="@android:color/black" />
+    <TextView
+        android:id="@+id/txtMinor"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelMinor"
+        android:layout_toRightOf="@+id/txtMajor"
+        android:layout_marginTop="5dp"
+        android:textColor="@android:color/black" />
+    <TextView
+        android:id="@+id/labelRssi"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtUuid"
+        android:layout_toRightOf="@+id/labelMinor"
+        android:layout_marginTop="5dp"
+        android:text="RSSI"
+        android:textStyle="bold"
+        android:textColor="@android:color/black" />
+    <TextView
+        android:id="@+id/txtRssi"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labelRssi"
+        android:layout_toRightOf="@+id/txtMinor"
+        android:layout_marginTop="5dp"
+        android:textColor="@android:color/black" />
+
+</RelativeLayout>

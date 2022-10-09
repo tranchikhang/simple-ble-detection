@@ -8,7 +8,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.result.contract.ActivityResultContract
+import android.widget.ListView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -18,11 +18,11 @@ import kotlin.system.exitProcess
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val PERMISSION_CODE = 1
     private val TAG = "MainActivity"
 
     private lateinit var scanService: ScanService
-
+    private lateinit var adapter: DeviceListAdapter
+    private lateinit var deviceList: ArrayList<IBeacon>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,17 +31,25 @@ class MainActivity : AppCompatActivity() {
 
         binding.scanBtn.setOnClickListener { startScan() }
         binding.exitBtn.setOnClickListener { exitApp() }
+        val listView: ListView = findViewById(R.id.deviceList)
+        deviceList = ArrayList()
+        this.adapter = DeviceListAdapter(this, this.deviceList)
+        listView.adapter = this.adapter
 
-
-        // catch bluetooth is disabled exception
+        // check for permission to scan BLE
         if (isPermissionGranted(this)) {
-            scanService = ScanService(this, binding.bleDevice)
+            Log.d(TAG, "@onCreate init scan service")
+            scanService = ScanService(this, this.deviceList, this.adapter)
         }
 
     }
 
     private fun exitApp() {
         // exit application
+        if (scanService.isScanning()) {
+            binding.scanBtn.text = "Scan"
+            scanService.stopBLEScan()
+        }
         this@MainActivity.finish()
         exitProcess(0)
     }
@@ -49,10 +57,12 @@ class MainActivity : AppCompatActivity() {
     private fun startScan() {
         // check Bluetooth
         if (!scanService.isBluetoothEnabled()) {
-            Log.d(TAG, "@startScan Bletooth is disabled")
+            Log.d(TAG, "@startScan Bluetooth is disabled")
             val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             requestBluetooth.launch(intent)
         } else {
+
+            scanService.initScanner()
             // start scanning BLE device
             scanService.startBLEScan()
             if (scanService.isScanning()) {
@@ -91,8 +101,6 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "@isPermissionGranted: requesting Bluetooth on Android >= 12")
                 ActivityCompat.requestPermissions(this, ANDROID_12_BLE_PERMISSIONS, 2)
                 return false
-            } else {
-                return true
             }
         } else {
             if (ActivityCompat.checkSelfPermission(
@@ -103,8 +111,6 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "@isPermissionGranted: requesting Location on Android < 12")
                 ActivityCompat.requestPermissions(this, BLE_PERMISSIONS, 3)
                 return false
-            } else {
-                return true
             }
         }
         Log.d(TAG, "@isPermissionGranted Bluetooth permission is ON")

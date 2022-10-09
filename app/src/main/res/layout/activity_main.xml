@@ -20,7 +20,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center">
+        android:gravity="center"
+        android:weightSum="10">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton android:id="@+id/radio_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All"
+                android:layout_marginRight="20px"
+                android:onClick="onRadioAllClicked"
+                android:checked="true"/>
+            <RadioButton android:id="@+id/radio_ninjas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="iBeacon"
+                android:layout_marginRight="20px"
+                android:onClick="onRadioiBeaconClicked"/>
+
+        </RadioGroup>
 
         <Button
             android:id="@+id/scanBtn"
@@ -30,20 +51,25 @@
             android:textColor="@color/White"
             android:backgroundTint="@color/MediumSeaGreen"
             />
-        <ScrollView
-            android:id="@+id/SCROLLER_ID"
-            android:layout_width="fill_parent"
-            android:layout_height="400dp"
-            android:scrollbars="vertical"
-            android:fillViewport="true">
-            <TextView
-                android:id="@+id/bleDevice"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:textSize="20dp"
-                android:textColor="@color/Black"
-                android:layout_weight="1.0"/>
-        </ScrollView>
+        <ListView
+            android:id="@+id/deviceList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="9"></ListView>
+<!--        <ScrollView-->
+<!--            android:id="@+id/SCROLLER_ID"-->
+<!--            android:layout_width="fill_parent"-->
+<!--            android:layout_height="400dp"-->
+<!--            android:scrollbars="vertical"-->
+<!--            android:fillViewport="true">-->
+<!--            <TextView-->
+<!--                android:id="@+id/bleDevice"-->
+<!--                android:layout_width="fill_parent"-->
+<!--                android:layout_height="fill_parent"-->
+<!--                android:textSize="20dp"-->
+<!--                android:textColor="@color/Black"-->
+<!--                android:layout_weight="1.0"/>-->
+<!--        </ScrollView>-->
 
         <Button
             android:id="@+id/exitBtn"

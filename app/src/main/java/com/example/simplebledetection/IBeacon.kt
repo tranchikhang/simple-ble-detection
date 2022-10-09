@@ -1,17 +1,15 @@
 package com.example.simplebledetection
 
+import android.bluetooth.le.ScanResult
+import com.example.simplebledetection.utils.ConversionUtils
 
-class IBeacon {
+
+class IBeacon(scanResult: ScanResult, packetData: ByteArray) : BLEDevice(scanResult) {
 
     /**
      * beacon UUID
      */
     private var uuid: String = ""
-
-    /**
-     * The measured signal strength of the Bluetooth packet
-     */
-    private var rssi: Int = 0
 
     /**
      * packet raw data
@@ -29,10 +27,9 @@ class IBeacon {
     private val minorPosStart = 27
     private val minorPosEnd = 28
 
-    private val TAG = "IBeacon"
-
-    constructor(packetData: ByteArray) {
+    init {
         rawByteData = packetData
+
     }
 
     /**
@@ -44,7 +41,7 @@ class IBeacon {
             if (rawByteData[startByte + 2].toInt() and 0xff == 0x02 && rawByteData[startByte + 3].toInt() and 0xff == 0x15) {
                 val uuidBytes = ByteArray(16)
                 System.arraycopy(rawByteData, startByte + 4, uuidBytes, 0, 16)
-                val hexString = BLEDevice.bytesToHex(uuidBytes)
+                val hexString = ConversionUtils.bytesToHex(uuidBytes)
                 if (!hexString.isNullOrEmpty()) {
                     uuid = hexString.substring(0, 8) + "-" +
                             hexString.substring(8, 12) + "-" +
@@ -79,5 +76,4 @@ class IBeacon {
             minor = (rawByteData[minorPosStart].toInt() and 0xff) * 0x100 + (rawByteData[minorPosEnd].toInt() and 0xff)
         return minor as Int
     }
-
 }
