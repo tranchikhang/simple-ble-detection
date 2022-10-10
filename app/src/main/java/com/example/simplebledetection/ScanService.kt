@@ -17,11 +17,14 @@ class ScanService {
 
     private val TAG = "ScanService"
 
+    // Scan service flag
     private var isScanning = false
+    // BLE scan flag
+    private var isScanningBLE = false
     private val handler = Handler()
 
-    // Stops scanning after 3 seconds.
-    private var SCAN_PERIOD: Long = 3000
+    // Scan for x seconds, then stop for x seconds, then scan again
+    private var SCAN_PERIOD: Long = 5000
 
     private lateinit var deviceList: ArrayList<IBeacon>
     private lateinit var adapter: DeviceListAdapter
@@ -46,47 +49,51 @@ class ScanService {
         }
     }
 
-    fun isBluetoothEnabled() : Boolean {
+    fun isBluetoothEnabled(): Boolean {
         return bluetoothAdapter.isEnabled
     }
 
     fun startBLEScan() {
+        isScanning = true
         try {
-            if (!isScanning) {
-                // Stops scanning after a pre-defined scan period.
-                handler.postDelayed({
-                    isScanning = false
-                    bluetoothLeScanner.stopScan(leScanCallback)
-                }, SCAN_PERIOD)
-                isScanning = true
-
-                bluetoothLeScanner.startScan(leScanCallback)
-            } else {
-                isScanning = false
-                bluetoothLeScanner.stopScan(leScanCallback)
-            }
+            handler.post(object : Runnable {
+                override fun run() {
+                    if (isScanningBLE) {
+                        Log.e(TAG, "@startBLEScan stop scan")
+                        isScanningBLE = false
+                        bluetoothLeScanner.stopScan(leScanCallback)
+                    } else {
+                        Log.e(TAG, "@startBLEScan start scan")
+                        isScanningBLE = true
+                        bluetoothLeScanner.startScan(leScanCallback)
+                    }
+                    Log.e(TAG, "@startBLEScan post new message")
+                    // Stops scanning after a pre-defined scan period.
+                    handler.postDelayed(this, SCAN_PERIOD)
+                }
+            })
         } catch (e: SecurityException) {
             Log.e(TAG, "@startScan SecurityException: " + e.message)
         }
     }
 
     fun stopBLEScan() {
-        if (isScanning) {
+        isScanning = false
+        if (isScanningBLE) {
             bluetoothLeScanner.stopScan(leScanCallback)
         }
     }
 
     private val leScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
-            if (result !=null) {
+            if (result != null) {
                 val scanRecord = result.scanRecord
                 super.onScanResult(callbackType, result)
                 try {
                     if (scanRecord != null && isIBeacon(scanRecord.bytes)) {
-                        Log.d(TAG, "Device is iBeacon")
                         val iBeacon = IBeacon(result, scanRecord.bytes)
                         val idx = checkDeviceExists(result)
-                        if (idx==-1) {
+                        if (idx == -1) {
                             deviceList.add(iBeacon)
                         } else {
                             // update
@@ -107,7 +114,7 @@ class ScanService {
      * @param result BLE scan result
      * @return -1 if doesn't exist
      */
-    fun checkDeviceExists(result: ScanResult) : Int {
+    fun checkDeviceExists(result: ScanResult): Int {
         val indexQuery = deviceList.indexOfFirst { it.getAddress() == result.device.address }
         return indexQuery
     }

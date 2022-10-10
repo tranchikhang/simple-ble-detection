@@ -64,12 +64,12 @@ class MainActivity : AppCompatActivity() {
 
             scanService.initScanner()
             // start scanning BLE device
-            scanService.startBLEScan()
             if (scanService.isScanning()) {
-                binding.scanBtn.text = "Scanning"
-            } else {
                 binding.scanBtn.text = "Scan"
                 scanService.stopBLEScan()
+            } else {
+                scanService.startBLEScan()
+                binding.scanBtn.text = "Scanning"
             }
         }
     }

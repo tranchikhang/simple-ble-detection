@@ -46,7 +46,7 @@
         <Button
             android:id="@+id/scanBtn"
             android:layout_width="120dp"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:text="Scan"
             android:textColor="@color/White"
             android:backgroundTint="@color/MediumSeaGreen"
@@ -74,7 +74,7 @@
         <Button
             android:id="@+id/exitBtn"
             android:layout_width="120dp"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:text="Exit"
             android:layout_marginTop="30dp"
             android:textColor="@color/White"
