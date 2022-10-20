@@ -76,4 +76,8 @@ class IBeacon(scanResult: ScanResult, packetData: ByteArray) : BLEDevice(scanRes
             minor = (rawByteData[minorPosStart].toInt() and 0xff) * 0x100 + (rawByteData[minorPosEnd].toInt() and 0xff)
         return minor as Int
     }
+
+    override fun toString(): String {
+        return "Major= " + major.toString() + " Minor= " + minor.toString() + " rssi=" + getRssi()
+    }
 }
