@@ -7,9 +7,23 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 
-class DeviceListAdapter(private val deviceList: ArrayList<IBeacon>) : Adapter<DeviceListAdapter.ViewHolder>() {
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+const val VIEW_TYPE_BLE = 0
+const val VIEW_TYPE_IBEACON = 1
+class DeviceListAdapter(private val deviceList: ArrayList<Any>) : Adapter<RecyclerView.ViewHolder>() {
+
+    // https://stackoverflow.com/questions/47457326/is-it-an-anti-pattern-to-use-inheritance-when-handling-recyclerview-list-items
+    class BLEViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        val address: TextView
+        val rssi: TextView
+
+        init {
+            address = view.findViewById(R.id.text_address_value)
+            rssi = view.findViewById(R.id.text_rssi_value)
+        }
+    }
+
+    class IBeaconViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val uuid: TextView
         val major: TextView
         val minor: TextView
@@ -17,30 +31,51 @@ class DeviceListAdapter(private val deviceList: ArrayList<IBeacon>) : Adapter<De
         val rssi: TextView
 
         init {
-            uuid = view.findViewById(R.id.txtUuid)
-            major = view.findViewById(R.id.txtMajor)
-            minor = view.findViewById(R.id.txtMinor)
-            address = view.findViewById(R.id.txtAddress)
-            rssi = view.findViewById(R.id.txtRssi)
+            uuid = view.findViewById(R.id.text_uuid_value)
+            major = view.findViewById(R.id.text_major_value)
+            minor = view.findViewById(R.id.text_minor_value)
+            address = view.findViewById(R.id.text_address_value)
+            rssi = view.findViewById(R.id.text_rssi_value)
         }
     }
 
-    // Create new views (invoked by the layout manager)
-    override fun onCreateViewHolder(viewGroup: ViewGroup,  viewType: Int): ViewHolder {
-        // Create a new view, which defines the UI of the list item
-        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.device_listview, viewGroup,false)
+    override fun getItemViewType(position: Int): Int {
+        val dev: Any = deviceList.get(position)
+        if (dev is IBeacon)
+            return VIEW_TYPE_IBEACON
+        return VIEW_TYPE_BLE
+    }
 
-        return ViewHolder(view)
+    // Create new views (invoked by the layout manager)
+    override fun onCreateViewHolder(viewGroup: ViewGroup,  viewType: Int): RecyclerView.ViewHolder {
+        // Create a new view, which defines the UI of the list item
+        if (viewType == VIEW_TYPE_IBEACON) {
+            return IBeaconViewHolder(LayoutInflater.from(viewGroup.context).inflate(R.layout.ibeacon_item, viewGroup,false))
+        }
+        return BLEViewHolder(LayoutInflater.from(viewGroup.context).inflate(R.layout.ble_item, viewGroup,false))
 
     }
 
     // Replace the contents of a view (invoked by the layout manager)
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.uuid.text = deviceList[position].getUUID()
-        holder.major.text = deviceList[position].getMajor().toString()
-        holder.minor.text = deviceList[position].getMinor().toString()
-        holder.address.text = deviceList[position].getAddress()
-        holder.rssi.text = deviceList[position].getRssi().toString()
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder.itemViewType) {
+            VIEW_TYPE_IBEACON -> {
+                val iBeaconView = holder as IBeaconViewHolder
+                val ibeacon =  deviceList[position] as IBeacon
+                iBeaconView.uuid.text = ibeacon.getUUID()
+                iBeaconView.major.text = ibeacon.getMajor().toString()
+                iBeaconView.minor.text = ibeacon.getMinor().toString()
+                iBeaconView.address.text = ibeacon.getAddress()
+                iBeaconView.rssi.text = ibeacon.getRssi().toString()
+            }
+            VIEW_TYPE_BLE -> {
+                val bleView = holder as BLEViewHolder
+                val ble =  deviceList[position] as BLEDevice
+                bleView.address.text = ble.getAddress()
+                bleView.rssi.text = ble.getRssi().toString()
+            }
+        }
+
     }
 
     override fun getItemCount(): Int {

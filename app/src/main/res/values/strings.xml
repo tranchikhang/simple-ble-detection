@@ -4,6 +4,13 @@
     <string name="label_scan">Scan</string>
     <string name="label_scanning">Scanning</string>>
     <string name="label_all">All</string>
+    <string name="label_BLE_device">BLE device</string>
     <string name="label_ibeacon">iBeacon</string>
     <string name="label_exit">Exit</string>
+    <string name="label_name">Name</string>
+    <string name="label_address">Address</string>
+    <string name="label_uuid">UUID</string>
+    <string name="label_major">Major</string>
+    <string name="label_minor">Minor</string>
+    <string name="label_rssi">RSSI</string>
 </resources>

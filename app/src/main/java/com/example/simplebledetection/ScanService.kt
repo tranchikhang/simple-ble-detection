@@ -7,7 +7,6 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
-import android.os.Handler
 import android.util.Log
 
 class ScanService {
@@ -22,13 +21,10 @@ class ScanService {
     // Scan service flag
     private var isScanning = false
 
-    // Scan for x seconds, then stop for x seconds, then scan again
-    private var SCAN_PERIOD: Long = 2000
-
-    private lateinit var deviceList: ArrayList<IBeacon>
+    private lateinit var deviceList: ArrayList<Any>
     private lateinit var adapter: DeviceListAdapter
 
-    constructor(context: Context, deviceList: ArrayList<IBeacon>, adapter: DeviceListAdapter) {
+    constructor(context: Context, deviceList: ArrayList<Any>, adapter: DeviceListAdapter) {
         this.deviceList = deviceList
 
         builder = ScanSettings.Builder()
@@ -83,15 +79,26 @@ class ScanService {
                 Log.e(TAG, "@result: " + result.device.address)
                 super.onScanResult(callbackType, result)
                 try {
-                    if (scanRecord != null && isIBeacon(scanRecord.bytes)) {
-                        val iBeacon = IBeacon(result, scanRecord.bytes)
-                        val idx = checkDeviceExists(result)
-                        Log.e(TAG, iBeacon.toString())
-                        if (idx == -1) {
-                            deviceList.add(iBeacon)
+                    if (scanRecord != null) {
+                        if (isIBeacon(scanRecord.bytes)) {
+                            val iBeacon = IBeacon(result, scanRecord.bytes)
+                            val idx = checkDeviceExists(result)
+                            Log.e(TAG, iBeacon.toString())
+                            if (idx == -1) {
+                                deviceList.add(iBeacon)
+                            } else {
+                                // update
+                                deviceList[idx] = iBeacon
+                            }
                         } else {
-                            // update
-                            deviceList[idx] = iBeacon
+                            val ble = BLEDevice(result)
+                            val idx = checkDeviceExists(result)
+                            if (idx == -1) {
+                                deviceList.add(ble)
+                            } else {
+                                // update
+                                deviceList[idx] = ble
+                            }
                         }
                         adapter.notifyDataSetChanged()
                     }
@@ -109,7 +116,7 @@ class ScanService {
      * @return -1 if doesn't exist
      */
     fun checkDeviceExists(result: ScanResult): Int {
-        val indexQuery = deviceList.indexOfFirst { it.getAddress() == result.device.address }
+        val indexQuery = deviceList.indexOfFirst { (it as BLEDevice) .getAddress() == result.device.address }
         return indexQuery
     }
 

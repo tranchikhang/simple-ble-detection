@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var scanService: ScanService
     private lateinit var adapter: DeviceListAdapter
-    private lateinit var deviceList: ArrayList<IBeacon>
+    private lateinit var deviceList: ArrayList<Any>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
