@@ -1,51 +1,49 @@
 package com.example.simplebledetection
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Adapter
 
-class DeviceListAdapter : BaseAdapter {
+class DeviceListAdapter(private val deviceList: ArrayList<IBeacon>) : Adapter<DeviceListAdapter.ViewHolder>() {
 
-    private var deviceList : ArrayList<IBeacon>
-    private var context : Context
+    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        val uuid: TextView
+        val major: TextView
+        val minor: TextView
+        val address: TextView
+        val rssi: TextView
 
-    constructor(context: Context, dataList: ArrayList<IBeacon>) {
-        this.deviceList = dataList
-        this.context = context
+        init {
+            uuid = view.findViewById(R.id.txtUuid)
+            major = view.findViewById(R.id.txtMajor)
+            minor = view.findViewById(R.id.txtMinor)
+            address = view.findViewById(R.id.txtAddress)
+            rssi = view.findViewById(R.id.txtRssi)
+        }
     }
 
-    override fun getCount(): Int {
+    // Create new views (invoked by the layout manager)
+    override fun onCreateViewHolder(viewGroup: ViewGroup,  viewType: Int): ViewHolder {
+        // Create a new view, which defines the UI of the list item
+        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.device_listview, viewGroup,false)
+
+        return ViewHolder(view)
+
+    }
+
+    // Replace the contents of a view (invoked by the layout manager)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.uuid.text = deviceList[position].getUUID()
+        holder.major.text = deviceList[position].getMajor().toString()
+        holder.minor.text = deviceList[position].getMinor().toString()
+        holder.address.text = deviceList[position].getAddress()
+        holder.rssi.text = deviceList[position].getRssi().toString()
+    }
+
+    override fun getItemCount(): Int {
         return deviceList.size
-    }
-
-    override fun getItem(position: Int): Any {
-        return deviceList[position]
-    }
-
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val rowView = LayoutInflater.from(context).inflate(R.layout.device_listview, parent, false)
-        val uuid: TextView = rowView.findViewById(R.id.txtUuid)
-        uuid.text = deviceList[position].getUUID()
-
-        val major: TextView = rowView.findViewById(R.id.txtMajor)
-        major.text = deviceList[position].getMajor().toString()
-
-        val minor: TextView = rowView.findViewById(R.id.txtMinor)
-        minor.text = deviceList[position].getMinor().toString()
-
-        val address: TextView = rowView.findViewById(R.id.txtAddress)
-        address.text = deviceList[position].getAddress()
-
-        val rssi: TextView = rowView.findViewById(R.id.txtRssi)
-        rssi.text = deviceList[position].getRssi().toString()
-
-        return rowView
     }
 }

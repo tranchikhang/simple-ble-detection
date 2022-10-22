@@ -30,15 +30,15 @@
             <RadioButton android:id="@+id/radio_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All"
-                android:layout_marginRight="20px"
+                android:text="@string/label_all"
+                android:layout_marginRight="20dp"
                 android:onClick="onRadioAllClicked"
                 android:checked="true"/>
             <RadioButton android:id="@+id/radio_ninjas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="iBeacon"
-                android:layout_marginRight="20px"
+                android:text="@string/label_ibeacon"
+                android:layout_marginRight="20dp"
                 android:onClick="onRadioiBeaconClicked"/>
 
         </RadioGroup>
@@ -47,35 +47,21 @@
             android:id="@+id/scanBtn"
             android:layout_width="120dp"
             android:layout_height="50dp"
-            android:text="Scan"
+            android:text="@string/label_scan"
             android:textColor="@color/White"
             android:backgroundTint="@color/MediumSeaGreen"
             />
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/deviceList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="9"></ListView>
-<!--        <ScrollView-->
-<!--            android:id="@+id/SCROLLER_ID"-->
-<!--            android:layout_width="fill_parent"-->
-<!--            android:layout_height="400dp"-->
-<!--            android:scrollbars="vertical"-->
-<!--            android:fillViewport="true">-->
-<!--            <TextView-->
-<!--                android:id="@+id/bleDevice"-->
-<!--                android:layout_width="fill_parent"-->
-<!--                android:layout_height="fill_parent"-->
-<!--                android:textSize="20dp"-->
-<!--                android:textColor="@color/Black"-->
-<!--                android:layout_weight="1.0"/>-->
-<!--        </ScrollView>-->
+            android:layout_height="0dp"
+            android:layout_weight="9"/>
 
         <Button
             android:id="@+id/exitBtn"
             android:layout_width="120dp"
             android:layout_height="50dp"
-            android:text="Exit"
+            android:text="@string/label_exit"
             android:layout_marginTop="30dp"
             android:textColor="@color/White"
             android:backgroundTint="@color/Crimson"

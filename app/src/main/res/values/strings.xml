@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">SimpleBleDetection</string>
     <string name="log_ble_device">Device Name: %1$s rssi: %2$d</string>
+    <string name="label_scan">Scan</string>
+    <string name="label_scanning">Scanning</string>>
+    <string name="label_all">All</string>
+    <string name="label_ibeacon">iBeacon</string>
+    <string name="label_exit">Exit</string>
 </resources>
