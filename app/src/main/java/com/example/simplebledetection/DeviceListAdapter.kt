@@ -7,11 +7,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 
-
 const val VIEW_TYPE_BLE = 0
 const val VIEW_TYPE_IBEACON = 1
+
 class DeviceListAdapter(private val deviceList: ArrayList<Any>) : Adapter<RecyclerView.ViewHolder>() {
 
+    // https://stackoverflow.com/questions/47531755/how-to-inflate-different-layout-in-recyclerview-based-on-its-position-in-oncreat
+    // https://stackoverflow.com/questions/26245139/how-to-create-recyclerview-with-multiple-view-types
     // https://stackoverflow.com/questions/47457326/is-it-an-anti-pattern-to-use-inheritance-when-handling-recyclerview-list-items
     class BLEViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val address: TextView
