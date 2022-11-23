@@ -48,10 +48,21 @@ class ScanService {
         }
     }
 
+    /**
+     * Determine whether bluetooth is enabled or not
+     *
+     * @return true if bluetooth is enabled, false otherwise
+     */
     fun isBluetoothEnabled(): Boolean {
         return bluetoothAdapter.isEnabled
     }
 
+    /**
+     * Start BLE scan using bluetoothLeScanner
+     * if app is not scanning, start scan by calling startScan and passing a callback method
+     * else stop scan
+     * @return {none}
+     */
     fun startBLEScan() {
         if (isScanning)
             return
@@ -72,6 +83,9 @@ class ScanService {
         bluetoothLeScanner.stopScan(leScanCallback)
     }
 
+    /**
+     * callback method when app detects BLE device
+     */
     private val leScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
             if (result != null) {

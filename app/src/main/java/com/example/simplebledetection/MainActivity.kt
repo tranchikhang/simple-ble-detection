@@ -82,18 +82,26 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
+    // necessary permissions on Android <12
     private val BLE_PERMISSIONS = arrayOf(
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_FINE_LOCATION
     )
 
+    // necessary permissions on Android >=12
     private val ANDROID_12_BLE_PERMISSIONS = arrayOf(
         Manifest.permission.BLUETOOTH_SCAN,
         Manifest.permission.BLUETOOTH_CONNECT,
         Manifest.permission.ACCESS_FINE_LOCATION
     )
 
+    /**
+     * Determine whether the location permission has been granted
+     * if not, request the permission
+     *
+     * @param context
+     * @return true if user has granted permission
+     */
     private fun isPermissionGranted(context: Context): Boolean {
         Log.d(TAG, "@isPermissionGranted: checking bluetooth")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
