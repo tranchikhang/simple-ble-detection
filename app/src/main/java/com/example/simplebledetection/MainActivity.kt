@@ -44,8 +44,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * exit application
+     */
     private fun exitApp() {
-        // exit application
+        // if scanning service is running, stop scan then exit
         if (scanService.isScanning()) {
             binding.scanBtn.text = resources.getString(R.string.label_scan)
             scanService.stopBLEScan()
@@ -54,6 +57,11 @@ class MainActivity : AppCompatActivity() {
         exitProcess(0)
     }
 
+    /**
+     * Start BLE scan
+     * Check Bluetooth before scanning.
+     * If Bluetooth is disabled, request user to turn on Bluetooth
+     */
     private fun startScan() {
         // check Bluetooth
         if (!scanService.isBluetoothEnabled()) {
@@ -61,7 +69,6 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             requestBluetooth.launch(intent)
         } else {
-
             scanService.initScanner()
             // start scanning BLE device
             if (scanService.isScanning()) {

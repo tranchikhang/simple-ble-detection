@@ -41,6 +41,10 @@ class DeviceListAdapter(private val deviceList: ArrayList<Any>) : Adapter<Recycl
         }
     }
 
+    /**
+     * Get viewtype based on BLE device type
+     * If BLE device is iBeacon, use iBeacon layout
+     */
     override fun getItemViewType(position: Int): Int {
         val dev: Any = deviceList.get(position)
         if (dev is IBeacon)

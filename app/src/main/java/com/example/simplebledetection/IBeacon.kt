@@ -57,6 +57,7 @@ class IBeacon(scanResult: ScanResult, packetData: ByteArray) : BLEDevice(scanRes
 
     /**
      * UUID getter method
+     * if UUID is not calculated, calculate from packet raw data, then store to property
      */
     fun getUUID(): String {
         if (uuid.isNullOrEmpty()) {
@@ -65,12 +66,20 @@ class IBeacon(scanResult: ScanResult, packetData: ByteArray) : BLEDevice(scanRes
         return uuid
     }
 
+    /**
+     * Get iBeacon major
+     * if major is not calculated, calculate from packet raw data, then store to property
+     */
     fun getMajor(): Int {
         if (major == null)
             major = (rawByteData[majorPosStart].toInt() and 0xff) * 0x100 + (rawByteData[majorPosEnd].toInt() and 0xff)
         return major as Int
     }
 
+    /**
+     * Get iBeacon minor
+     * if minor is not calculated, calculate from packet raw data, then store to property
+     */
     fun getMinor(): Int {
         if (minor == null)
             minor = (rawByteData[minorPosStart].toInt() and 0xff) * 0x100 + (rawByteData[minorPosEnd].toInt() and 0xff)
